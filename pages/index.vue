@@ -9,8 +9,12 @@
 
     <template v-if="users.length > 0">
       <div class="list">
-        <Card :key="'list-user-item' + user.id" v-for="user in usersWithFilter" :user="user"
-          @click="goTo(`/user/${user.id}`)" />
+        <Card 
+          :key="'list-user-item' + user.id" v-for="user in usersWithFilter"
+          :user="user" 
+          @details="handleToDetails((user.id as string))" 
+          @delete="handleDelete((user.id as string))" 
+        />
       </div>
     </template>
     <template v-else>
@@ -23,12 +27,14 @@
 
 <script lang="ts">
 import { useUserStore } from '@/stores/UserStore'
-import { mapActions, mapState } from 'pinia';
+import { mapState } from 'pinia';
 
 export default defineComponent({
   name: 'PageIndex',
-  setup() {
+  async setup() {
     useHead({ title: 'Users' })
+    const userStore = useUserStore()
+    await useAsyncData(() => userStore.getListUser().then(() => true))
   },
   data() {
     return {
@@ -43,16 +49,18 @@ export default defineComponent({
       return this.users.filter(user => user.name.toLowerCase().startsWith(this.inputSearch.toLowerCase()))
     }
   },
-  async beforeMount() {
-    await this.getListUser()
-  },
   methods: {
-    ...mapActions(useUserStore, ['getListUser']),
     getInputSearchValue(value: string) {
       this.inputSearch = value
     },
     goTo(route: string) {
       this.$nuxt.$router.push(route)
+    },
+    handleDelete(id: string) {
+      console.log(id)
+    },
+    handleToDetails(id: string) {
+      this.$router.push(`/user/${id}`)
     }
   }
 })
