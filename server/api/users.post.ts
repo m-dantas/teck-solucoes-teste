@@ -7,14 +7,15 @@ export default defineEventHandler(async (event) => {
 
     if (!verifyValues) {
         setResponseStatus(event, 400)
-        return { sucesso: false, data: [] }
+        return { success: false, message: 'Erro ao processar requisição', data: [] }
     }
         
     const verifyIfNotExist = sharedUsers.filter(user => user.cpf === body.cpf || user.email === body.email)
     if (verifyIfNotExist.length > 0) { // Se entrar aqui, quer dizer que existe
-        return { sucesso: false, data: [] }
+        setResponseStatus(event, 409)
+        return { success: false, message: 'E-mail ou CPF já registrados', data: [] }
     }
     const includedUuid = { id: uuidv4(), ...body }
     sharedUsers.push(includedUuid)
-    return { sucesso: true, data: includedUuid }
+    return { success: true, message: 'Registro criado com sucesso', data: includedUuid }
 })
