@@ -12,8 +12,8 @@
 
 <script lang="ts">
 import type { PropType } from 'vue'
-import type { User } from '~/types/User';
-import utilsCpf from '~/utils/cpf'
+import type { User } from '@/types/User';
+import utilsCpf from '@/utils/cpf'
 import Eye from '@/components/icons/Eye.vue'
 
 export default defineComponent({
@@ -38,7 +38,7 @@ export default defineComponent({
 <style scoped>
 .card {
     align-items: center;
-    background-color: var(--primary);
+    background-color: #ada;
     border-radius: 5px;
     box-shadow: 1px 1px 2px #445b44;
     color: var(--font-color);
