@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid"
 import { User } from "~/types/User"
-import sharedUsers from "./data"
+import sharedUsers from "../data"
 export default defineEventHandler(async (event) => {
     const body: User = await readBody(event)
     const verifyValues = Object.values(body).every(item => item !== "")
