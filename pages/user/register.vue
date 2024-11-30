@@ -9,7 +9,8 @@
 
 <script lang="ts">
 import { mapActions, mapState } from 'pinia';
-import FormUser from '~/components/forms/FormUser.vue';
+import FormUser from '@/components/forms/FormUser.vue';
+import type { User } from '@/types/User';
 
 export default defineComponent({
   name: 'PageRegister',
@@ -24,14 +25,12 @@ export default defineComponent({
   computed: {
     ...mapState(useUserStore, ['users'])
   },
-  watch: {
-    users () {
-      setTimeout(() => this.$router.push('/'), 500)
-    }
-  },
   methods: {
     ...mapActions(useUserStore, ['createNewRegister']),
-  }
+    handleSubmit (body: User) {
+      this.createNewRegister(body, '/')
+    }
+  },
 })
 </script>
 
