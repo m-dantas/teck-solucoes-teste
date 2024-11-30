@@ -2,7 +2,7 @@
    <div class="card">
         <div class="information">
             <div class="primary">{{ user.name }}</div>
-            <div class="secondary">{{ user.cpf }}</div>
+            <div class="secondary">{{ cpf }}</div>
         </div>
         <div class="action">
             <Eye />
@@ -13,8 +13,8 @@
 <script lang="ts">
 import type { PropType } from 'vue'
 import type { User } from '~/types/User';
+import utilsCpf from '~/utils/cpf'
 import Eye from '@/components/icons/Eye.vue'
-
 export default defineComponent({
     components: {
         Eye
@@ -25,6 +25,11 @@ export default defineComponent({
             required: true,
             default: () => {}
         } 
+    },
+    computed: {
+        cpf (): string {
+            return utilsCpf.mask(this.user.cpf)
+        }
     }
 })
 </script>

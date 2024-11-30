@@ -1,70 +1,79 @@
 <template>
-    <div class="p-index container">
-        <div class="header">
-            <h1 class="title">Users</h1>
-            <Button label="Add user" />
-        </div>
-        <div class="search">
-            <InputCustom 
-                label="Filter"
-                name="search-user"
-                type="search"
-                id="search-user"
-            />
-        </div>
-        
-        <div class="list">
-            <Card :user="{ name: 'Mauricio Correia Dantas', cpf: '490.849.598-09', username: 'mdantas', email: 'mauricio.dantascp@gmail.com', group: 'admin' }" />
-            <Card :user="{ name: 'Mauricio Dantas', cpf: '490.849.598-09', username: 'mdantas', email: 'mauricio.dantascp@gmail.com', group: 'admin' }" />
-        </div>
+  <div class="p-index container">
+    <Header title="Users">      
+      <Button label="Add user" @click="goTo('/user/register')" />
+    </Header>
+    <div class="search">
+      <InputCustom label="Filter" name="search-user" type="search" id="search-input-user" placeholder="Type here" @value="getInputSearchValue" />
     </div>
+
+    <div class="list">
+      <Card :key="'list-user-item' + user.id" v-for="user in usersWithFilter" :user="user"
+        @click="goTo(`/user/edit-${user.id}`)" />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
+import { useUserStore } from '@/stores/UserStore'
+import { mapActions, mapState } from 'pinia';
 
 export default defineComponent({
-    name: 'IndexPage',
-    setup () {
-        useHead({ title: 'Users' })
+  name: 'PageIndex',
+  setup() {
+    useHead({ title: 'Users' })
+  },
+  data() {
+    return {
+      inputSearch: ''
     }
+  },
+  computed: {
+    ...mapState(useUserStore, {
+      users: 'users',
+    }),
+    usersWithFilter() {
+      return this.users.filter(user => user.name.toLowerCase().startsWith(this.inputSearch.toLowerCase()))
+    }
+  },
+  async beforeMount() {
+    await this.getListUser()
+  },
+  methods: {
+    ...mapActions(useUserStore, ['getListUser']),
+    getInputSearchValue(value: string) {
+      this.inputSearch = value
+    },
+    goTo(route: string) {
+      this.$nuxt.$router.push(route)
+    }
+  }
 })
 </script>
 
 <style scoped>
 .p-index {
-    & .header {
-        display: flex;
-        justify-content: space-between;
-        
-        & .title {
-            font-size: 32px;
-            font-weight: 500;
-        }
-    }
-    
+  & .list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  & .search,
+  .list {
+    margin-bottom: 32px;
+  }
+
+  @media (min-width: 1024px) {
     & .list {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 8px;
+      grid-template-columns: repeat(3, 1fr);
     }
+  }
 
-    & .header, .search, .list {
-        margin-bottom: 32px;
+  @media (min-width: 1279px) {
+    & .list {
+      grid-template-columns: repeat(5, 1fr);
     }
-
-    @media (min-width: 1024px) {
-        & .list {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-
-    @media (min-width: 1279px) {
-        & .list {
-            grid-template-columns: repeat(5, 1fr);
-        }
-    }    
+  }
 }
-
-
 </style>
-  
