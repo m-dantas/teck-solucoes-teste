@@ -1,8 +1,17 @@
 <template>
   <div class="input-custom">
-    <label class="label" :for="id">{{ label }}</label>
-    <input class="input" v-model="input" v-maska="hasMask" :type="type" :name="name" :id="id" :required="required" placeholder="Type here">
-    <span v-if="!isValid && input">Input inválida</span>
+    <label class="name-field" :for="id">{{ label }}</label>
+    <input
+      class="field"
+      v-model="input"
+      v-maska="mask"
+      :type="type"
+      :name="name"
+      :id="id"
+      :required="required"
+      :placeholder="placeholder"
+    >
+    <span class="field-error-message" v-if="!isValid && input">Input inválida</span>
   </div>
 </template>
 
@@ -36,6 +45,11 @@ export default defineComponent({
       required: false,
       default: false
     },
+    placeholder: {
+      type: String,
+      required: false,
+      default: ''
+    },
     validator: {
       type: Object as PropType<{ hasValidator: boolean, validator: Function }>,
       required: false,
@@ -46,7 +60,7 @@ export default defineComponent({
         }
       }
     },
-    hasMask: {
+    mask: {
       type: String,
       required: false,
       default: ''
@@ -80,18 +94,26 @@ export default defineComponent({
 
 <style scoped>
 .input-custom {
-  .label {
+  margin-bottom: 16px;
+  .name-field {
     margin-bottom: 8px;
     display: block;
   }
  
-  .input {
+  .field {
     width: 100%;
     border: none;
     border-radius: 5px;
     background-color: rgb(214, 233, 214);
     font-size: 16px;
     padding: 8px;
+  }
+
+  .field-error-message {
+    font-weight: bold;
+    margin-top: 8px;
+    font-size: 12px;
+    display: block
   }
 }
 </style>
