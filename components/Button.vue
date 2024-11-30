@@ -1,5 +1,5 @@
 <template>
-  <button class="custom-button" :type="type" :disabled="disabled">
+  <button class="custom-button" :class="{ secondary: isSecondary }" :type="type" :disabled="disabled">
     {{ label }}
   </button>
 </template>
@@ -25,6 +25,11 @@ export default defineComponent({
       type: Boolean,
       required: false,
       default: false
+    },
+    isSecondary: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   }
 })
@@ -36,6 +41,7 @@ export default defineComponent({
   border-radius: 5px;
   border: none;
   box-shadow: none;
+  color: #fff;
   font-size: 16px;
   font-weight: 500;
   min-width: 100px;
@@ -48,8 +54,13 @@ export default defineComponent({
   }
 
   &:disabled {
+    background-color: #ccc;
     box-shadow: unset;
     cursor: not-allowed;
+  }
+
+  &.secondary {
+    background-color: var(--secondary);
   }
 }
 </style>
