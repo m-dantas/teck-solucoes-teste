@@ -3,7 +3,7 @@
     <Header title="New user">      
       <Button label="Back to list" @click="$router.go(-1)" />
     </Header>
-    <FormUser @submit:forms="createNewRegister" />
+    <FormUser @submit:forms="handleSubmit" />
   </div>
 </template>
 
