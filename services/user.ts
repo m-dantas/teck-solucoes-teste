@@ -9,5 +9,8 @@ export default {
     },
     registerUser: async (body: User) => {
         return await $fetch('/api/users', { method: 'POST', body: JSON.stringify(body) })
-    }
+    },
+    updateUser: async (id: string, body: User) => {
+        return await $fetch(`/api/users/${id}`, { method: 'PUT', body: JSON.stringify(body) })
+    },
 }

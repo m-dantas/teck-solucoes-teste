@@ -9,7 +9,6 @@
       :name="name"
       :id="id"
       :required="required"
-      :value="defaultValue"
       :placeholder="placeholder"
     >
     <span class="field-error-message" v-if="!isValid && input">Input inválida</span>
@@ -77,6 +76,9 @@ export default defineComponent({
     input() {
       this.$emit('value', this.input)
     }
+  },
+  mounted () {
+    this.input = this.defaultValue
   }
 })
 </script>

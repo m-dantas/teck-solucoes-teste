@@ -60,6 +60,8 @@
 
 <script lang="ts">
 import utilsCpf from '@/utils/cpf'
+import type { PropType } from 'vue';
+import type { User } from '~/types/User';
 export default defineComponent({
   name: 'FormUser',
   data() {
@@ -89,10 +91,39 @@ export default defineComponent({
     }
   },
   emits: ['submit:forms'],
-  props: {},
+  props: {
+    defaultValue: {
+      type: Object as PropType<User>,
+      required: false,
+      default: () => ({
+        id: '',
+        cpf: '',
+        email: '',
+        group: '',
+        name: '',
+        username: ''
+      })
+    }
+  },
   computed: {
     formsValid () {
-      return Object.values(this.forms).every(item => item.value !== '')
+      const verifyIfAllFieldFill = Object.values(this.forms).every(item => item.isValid)
+      if (this.defaultValue.id !== '') {
+        const clonedDefaultValue = JSON.parse(JSON.stringify(this.defaultValue));
+        delete clonedDefaultValue.id
+        const defaultValuesToArray = Object.values(clonedDefaultValue)
+        return !Object.values(this.forms).every((item, index) => item.value === defaultValuesToArray[index]) && verifyIfAllFieldFill
+      }
+      return verifyIfAllFieldFill
+    }
+  },
+  created () {
+    if (this.defaultValue.id !== '') {
+      this.forms.name.value = this.defaultValue.name
+      this.forms.cpf.value = this.defaultValue.cpf
+      this.forms.username.value = this.defaultValue.username
+      this.forms.email.value = this.defaultValue.email
+      this.forms.group.value = this.defaultValue.group
     }
   },
   methods: {
@@ -108,19 +139,22 @@ export default defineComponent({
         this.$emit('submit:forms', body)
       }      
     },
-    getInputValues (field: 'name' | 'cpf'  | 'username' | 'email' | 'group', value: string) {
-      this.$data.forms[field].value = value
-      console.log(value)
-      switch (field) {
-        case 'cpf':
-          this.$data.forms[field].isValid = utilsCpf.validation(this.$data.forms[field].value)
-          break;
-        case 'email':
-          this.$data.forms[field].isValid = this.emailValidator(this.$data.forms[field].value)
-          break;
-        default:
-          this.$data.forms[field].isValid = this.spaceValidator(this.$data.forms[field].value)
-          break;
+    getInputValues (field: 'name' | 'cpf'  | 'username' | 'email' | 'group', value: string) {      
+      if (value !== '') {
+        this.$data.forms[field].value = value
+        switch (field) {
+          case 'cpf':
+            this.$data.forms[field].isValid = utilsCpf.validation(this.$data.forms[field].value) && this.$data.forms[field].value.length === 14
+            break;
+          case 'email':
+            this.$data.forms[field].isValid = this.emailValidator(this.$data.forms[field].value) && this.$data.forms[field].value.length >= 5
+            break;
+          default:
+            this.$data.forms[field].isValid = this.spaceValidator(this.$data.forms[field].value) && this.$data.forms[field].value.length >= 4
+            break;
+        }
+      } else {        
+        this.$data.forms[field].isValid = false
       }
     },
     spaceValidator (value: string) {

@@ -59,8 +59,9 @@ export const useUserStore = defineStore('UserStore', {
         alertStore.setShow(true)
       }
     },
-    async createNewRegister (body: User) {
+    async createNewRegister (body: User, to: string) {
       const alertStore = useAlertStore();
+      const router = useRouter()
       alertStore.$reset()
 
       try {
@@ -69,11 +70,39 @@ export const useUserStore = defineStore('UserStore', {
         alertStore.setMessage(message)
         alertStore.setIsError(false)
         alertStore.setShow(true)
+        setTimeout(() => router.push(to), 550)
       } catch (err: any) {
         alertStore.setMessage(COMMONS_EXCEPTIONS_MESSAGE(err))
         alertStore.setIsError(true)
         alertStore.setShow(true)
       }
+    },
+    async updateRegister (id: string, body: User, to: string) {
+      const alertStore = useAlertStore();
+      const router = useRouter()
+      alertStore.$reset()
+
+      try {
+        const { message } = await userService.updateUser(id, body)
+        await this.getListUser()
+        this.resetUser()
+        alertStore.setMessage(message)
+        alertStore.setIsError(false)
+        alertStore.setShow(true)
+        setTimeout(() => router.push(to), 550)
+      } catch (err: any) {
+        alertStore.setMessage(COMMONS_EXCEPTIONS_MESSAGE(err))
+        alertStore.setIsError(true)
+        alertStore.setShow(true)
+      }
+    },
+    resetUser () {
+      this.user.id = ''
+      this.user.name = ''
+      this.user.cpf = ''
+      this.user.username = ''
+      this.user.email = ''
+      this.user.group = ''
     }
   }
 })
