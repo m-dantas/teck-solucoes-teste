@@ -19,9 +19,9 @@ export default defineComponent({
 
 <style scoped>
 .header {
-  margin-bottom: 32px;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 32px;
 
   & .title {
     font-size: 32px;

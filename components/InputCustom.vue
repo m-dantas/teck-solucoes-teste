@@ -95,25 +95,26 @@ export default defineComponent({
 <style scoped>
 .input-custom {
   margin-bottom: 16px;
+
   .name-field {
-    margin-bottom: 8px;
     display: block;
+    margin-bottom: 8px;
   }
  
   .field {
-    width: 100%;
-    border: none;
-    border-radius: 5px;
     background-color: rgb(214, 233, 214);
+    border-radius: 5px;
+    border: none;
     font-size: 16px;
     padding: 8px;
+    width: 100%;
   }
 
   .field-error-message {
+    display: block;
+    font-size: 12px;
     font-weight: bold;
     margin-top: 8px;
-    font-size: 12px;
-    display: block
   }
 }
 </style>

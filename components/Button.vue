@@ -32,24 +32,24 @@ export default defineComponent({
 
 <style scoped>
 .custom-button {
-  border: none;
-  border-radius: 5px;
   background-color: var(--primary);
-  padding: 8px 16px;
+  border-radius: 5px;
+  border: none;
+  box-shadow: none;
   font-size: 16px;
   font-weight: 500;
-  box-shadow: none;
-  transition: box-shadow 0.3s ease;
   min-width: 100px;
+  padding: 8px 16px;
+  transition: box-shadow 0.3s ease;
   
   &:hover {
-    cursor: pointer;
     box-shadow: 3px 3px 9px #445b44;
+    cursor: pointer;
   }
 
   &:disabled {
-    cursor: not-allowed;
     box-shadow: unset;
+    cursor: not-allowed;
   }
 }
 </style>
