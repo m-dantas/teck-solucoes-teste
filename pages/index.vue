@@ -7,10 +7,17 @@
       <InputCustom label="Filter" name="search-user" type="search" id="search-input-user" placeholder="Type here" @value="getInputSearchValue" />
     </div>
 
-    <div class="list">
-      <Card :key="'list-user-item' + user.id" v-for="user in usersWithFilter" :user="user"
-        @click="goTo(`/user/edit-${user.id}`)" />
-    </div>
+    <template v-if="users.length > 0">
+      <div class="list">
+        <Card :key="'list-user-item' + user.id" v-for="user in usersWithFilter" :user="user"
+          @click="goTo(`/user/${user.id}`)" />
+      </div>
+    </template>
+    <template v-else>
+      <div class="info">
+        <h2>No users</h2>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -53,27 +60,39 @@ export default defineComponent({
 
 <style scoped>
 .p-index {
-  & .list {
+  .list {
     display: grid;
     grid-template-columns: 1fr;
     gap: 8px;
   }
 
-  & .search,
+  .search,
   .list {
     margin-bottom: 32px;
   }
 
+  .info {
+    background-color: #3d5c3d;
+    border-radius: 5px;
+    color: #fff;
+    padding: 24px;
+    text-align: center;
+    width: 100%;
+
+    h1 { margin: 0;}
+  }
+
   @media (min-width: 1024px) {
-    & .list {
+    .list {
       grid-template-columns: repeat(3, 1fr);
     }
   }
 
   @media (min-width: 1279px) {
-    & .list {
+    .list {
       grid-template-columns: repeat(5, 1fr);
     }
   }
+
 }
 </style>
