@@ -169,8 +169,8 @@ table {
 }
 
 :root {
-  --primary: #ada;
-  --secondary: #ccc;
+  --primary: rgb(31, 68, 31);
+  --secondary: rgb(61, 119, 61);
   --font-color: #162d16;
   --mobile: 786px;
 }
