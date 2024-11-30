@@ -1,7 +1,7 @@
 import type { User } from '~/types/User'
 
 export default {
-    get: async (): Promise<{ sucesso: boolean, data: Array<User> }> => {
+    get: async () => {
         return await $fetch('/api/users')
     },
     registerUser: async (body: User) => {
