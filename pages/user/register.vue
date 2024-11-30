@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import FormUser from '~/components/forms/FormUser.vue';
 
 export default defineComponent({
@@ -20,6 +20,14 @@ export default defineComponent({
     useHead({
       title: 'User - register'
     })
+  },
+  computed: {
+    ...mapState(useUserStore, ['users'])
+  },
+  watch: {
+    users () {
+      setTimeout(() => this.$router.push('/'), 500)
+    }
   },
   methods: {
     ...mapActions(useUserStore, ['createNewRegister']),

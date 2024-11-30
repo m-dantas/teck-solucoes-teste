@@ -3,12 +3,13 @@
     <label class="name-field" :for="id">{{ label }}</label>
     <input
       class="field"
-      v-model="input"
       v-maska="mask"
+      v-model="input"
       :type="type"
       :name="name"
       :id="id"
       :required="required"
+      :value="defaultValue"
       :placeholder="placeholder"
     >
     <span class="field-error-message" v-if="!isValid && input">Input inválida</span>
@@ -17,7 +18,7 @@
 
 <script lang="ts">
 import { vMaska  } from 'maska/vue'
-import type { PropType } from 'vue';
+
 export default defineComponent({
   name: 'InputCustom',
   directives: {
@@ -50,44 +51,32 @@ export default defineComponent({
       required: false,
       default: ''
     },
-    validator: {
-      type: Object as PropType<{ hasValidator: boolean, validator: Function }>,
+    defaultValue: {
+      type: String,
       required: false,
-      default: () => {
-        return {
-          hasValidator: false,
-          validator: () => true
-        }
-      }
+      default: ''
     },
     mask: {
       type: String,
       required: false,
       default: ''
+    },
+    isValid: {
+      type: Boolean,
+      required: false,
+      default: false
     }
-  },  
+  },
+  emits: ['value'],
   data() {
     return {
       input: '',
     }
   },
-  computed: {
-    isValid () {
-      if (this.validator.hasValidator) {
-        const valid = this.validator.validator(this.input)
-        valid ? this.$emit('value', this.input) : this.$emit('clear')
-        return valid
-      } else {
-        this.$emit('value', this.input)
-        return true
-      }
-      
+  watch: {
+    input() {
+      this.$emit('value', this.input)
     }
-  },
-  methods: {
-    sendValue (value: string) {
-      this.$emit('value', value)
-    },
   }
 })
 </script>
