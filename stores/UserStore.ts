@@ -7,6 +7,14 @@ type UserStoreState = {
   users: Array<User>
 }
 
+function COMMONS_EXCEPTIONS_MESSAGE (err: any) {
+  if (err.response) {
+    const { status, _data } = err.response;
+    return _data.message
+  }
+  return err.message
+}
+
 export const useUserStore = defineStore('UserStore', {
   state: () => ({ 
     users: [],
@@ -18,42 +26,31 @@ export const useUserStore = defineStore('UserStore', {
   actions: {
     async getListUser () {
       const alertStore = useAlertStore();
+      alertStore.$reset()
+
       try {
-        const { sucesso, data } = await userService.get()
-        if (sucesso) {
-          this.users = data
-        } else {
-          throw new Error('Ocorreu um erro na chamada')
-        }
-      } catch (err: unknown) {
-        alertStore.resetState()
-        if (err instanceof Error) {
-          alertStore.setMessage(err.message)
-          alertStore.setIsError(true)
-          alertStore.setShow(true)
-        }
+        const { data } = await userService.get()
+        this.users = data
+      } catch (err: any) {
+        alertStore.setMessage(COMMONS_EXCEPTIONS_MESSAGE(err))
+        alertStore.setIsError(true)
+        alertStore.setShow(true)
       }
     },
     async createNewRegister (body: User) {
       const alertStore = useAlertStore();
+      alertStore.$reset()
+
       try {
-        const { sucesso } = await userService.registerUser(body)
-        if (sucesso) {
-          await this.getListUser()
-          alertStore.resetState()
-          alertStore.setMessage('Registro criado com sucesso.')
-          alertStore.setIsError(false)
-          alertStore.setShow(true)
-        } else {
-          throw new Error('Ocorreu um erro na chamada')
-        }
-      } catch (err) {
-        alertStore.resetState()
-        if (err instanceof Error) {
-          alertStore.setMessage(err.message)
-          alertStore.setIsError(true)
-          alertStore.setShow(true)
-        }
+        const { message } = await userService.registerUser(body)
+        await this.getListUser()
+        alertStore.setMessage(message)
+        alertStore.setIsError(false)
+        alertStore.setShow(true)
+      } catch (err: any) {
+        alertStore.setMessage(COMMONS_EXCEPTIONS_MESSAGE(err))
+        alertStore.setIsError(true)
+        alertStore.setShow(true)
       }
     }
   }
