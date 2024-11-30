@@ -23,9 +23,7 @@ export const useAlertStore = defineStore('AlertStore', {
       this.show = show
     },
     resetState() {
-      this.show = false
-      this.isError = false,
-      this.message = ''
+      this.$reset()
     }
   }
 })
