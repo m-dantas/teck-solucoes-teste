@@ -96,6 +96,23 @@ export const useUserStore = defineStore('UserStore', {
         alertStore.setShow(true)
       }
     },
+    async deleteRegister (id: string) {
+      const alertStore = useAlertStore();
+      alertStore.$reset()
+
+      try {
+        const { message } = await userService.deleteUser(id)
+        await this.getListUser()
+        this.resetUser()
+        alertStore.setMessage(message)
+        alertStore.setIsError(false)
+        alertStore.setShow(true)
+      } catch (err: any) {
+        alertStore.setMessage(COMMONS_EXCEPTIONS_MESSAGE(err))
+        alertStore.setIsError(true)
+        alertStore.setShow(true)
+      }
+    },
     resetUser () {
       this.user.id = ''
       this.user.name = ''
