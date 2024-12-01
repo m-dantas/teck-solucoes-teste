@@ -1,11 +1,12 @@
-# Nuxt Minimal Starter
+# Teste técnico - Teck Soluções
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Site está com deploy em https://teck-solucoes-teste.onrender.com; Por ser tratar de um deploy gratuito, talvez esteja hibernando, de acordo com o render.com pode demorar em torno de 50 sec.
+
+
+
+Abaixo está o passa a passo padrão de apps utilizando Nuxt, não é necessário nenhum tipo de comando para rodar json-server, estou usando o próprio Server API que o Nuxt possui para persistência do CRUD.
 
 ## Setup
-
-Make sure to install dependencies:
-
 ```bash
 # npm
 npm install
@@ -71,5 +72,3 @@ yarn preview
 # bun
 bun run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
