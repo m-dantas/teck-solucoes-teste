@@ -21,7 +21,12 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['close']
+  emits: ['close'],
+  watch: {
+    show (value: boolean) {
+      value ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden')
+    }
+  }
 })
 </script>
 
@@ -34,7 +39,7 @@ export default defineComponent({
   box-sizing: border-box;
   padding-top: 32px;
   padding: 16px;
-  position: absolute;
+  position: fixed;
   text-align: center;
   width: 100%;
   z-index: 2;
@@ -54,7 +59,7 @@ export default defineComponent({
   height: 100vh;
   left: 0;
   opacity: 0.5;
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
   z-index: 1;

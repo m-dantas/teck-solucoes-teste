@@ -42,7 +42,7 @@ export default defineComponent({
   max-width: fit-content;
   min-width: 300px;
   padding: 16px;
-  position: absolute;
+  position: fixed;
   right: 15px;
 
   &.error {
