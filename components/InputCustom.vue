@@ -73,6 +73,9 @@ export default defineComponent({
     }
   },
   watch: {
+    defaultValue () {
+      this.input = this.defaultValue
+    },
     input() {
       this.$emit('value', this.input)
     }
