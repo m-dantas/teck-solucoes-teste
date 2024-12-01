@@ -1,19 +1,16 @@
 <template>
-  <div class="card" @click.stop="$emit('details')">
+  <div class="card" @click.stop="$emit('main')">
     <div class="information">
-      <div class="primary">{{ user.name }}</div>
-      <div class="secondary">{{ cpf }}</div>
+      <div class="primary">{{ primaryText }}</div>
+      <div class="secondary">{{ secondaryText }}</div>
     </div>
-    <div class="action" @click.stop="$emit('delete')">
-      <IconDelete />
+    <div v-if="hadAction" class="action" @click.stop="$emit('action')">
+      <slot></slot>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
-import type { User } from '@/types/User';
-import utilsCpf from '@/utils/cpf'
 import IconDelete from '@/components/icons/Delete.vue'
 
 export default defineComponent({
@@ -21,18 +18,22 @@ export default defineComponent({
     IconDelete
   },
   props: {
-    user: {
-      type: Object as PropType<User>,
-      required: true,
-      default: () => { }
+    primaryText: {
+      type: String,
+      required: true
+    },
+    secondaryText: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    hadAction: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
-  emits: ['delete', 'details'],
-  computed: {
-    cpf(): string {
-      return utilsCpf.mask(this.user.cpf)
-    }
-  }
+  emits: ['main', 'action']
 })
 </script>
 
@@ -71,22 +72,16 @@ export default defineComponent({
   }
 
   .action {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     align-items: center;
     display: flex;
     justify-content: center;
     border-radius: 100%;
-    background-color: #ada;
-
-    svg {
-      fill: #162d16;
-    }
 
     &:hover {
-      z-index: 2;
       background-color: #d1cccc;
-      transition: background-color 500ms linear;
+      transition: background-color 250ms linear;
     }
   }
 }
