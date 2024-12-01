@@ -4,17 +4,30 @@
       <Button label="Add user" @click="goTo('/user/register')" />
     </Header>
     <div class="search">
-      <InputCustom label="Filter" name="search-user" type="search" id="search-input-user" placeholder="Type here" @value="getInputSearchValue" />
+      <InputCustom 
+        label="Filter"
+        name="search-user" 
+        type="search" 
+        id="search-input-user" 
+        placeholder="Type here" 
+        :is-valid="true"
+        :default-value="inputSearch"
+        @value="getInputSearchValue" 
+      />
     </div>
 
     <template v-if="users.length > 0">
       <div class="list">
         <Card 
           :key="'list-user-item' + user.id" v-for="user in usersWithFilter"
-          :user="user" 
-          @details="handleToDetails((user.id as string))" 
-          @delete="handleDelete((user.id as string))" 
-        />
+          :primary-text="user.name"
+          :secondary-text="handleMaskCpf(user.cpf)" 
+          :had-action="true"
+          @main="handleToDetails((user.id as string))" 
+          @action="handleConfirmationModalDelete((user.id as string))"
+        >          
+          <IconDelete />
+        </Card>
       </div>
     </template>
     <template v-else>
@@ -22,15 +35,30 @@
         <h2>No users</h2>
       </div>
     </template>
+
+    <Modal :show="showModal" @close="showModal=false">
+      <div class="text">
+        Deseja excluir esse usuário?
+      </div>
+      <div class="actions">
+        <Button label="Confirmar" @click="handleDeleteUser" />
+        <Button label="Cancelar" :is-secondary="true" @click="[forDeleteId='', showModal=false]" />
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script lang="ts">
 import { useUserStore } from '@/stores/UserStore'
-import { mapState } from 'pinia';
+import { mapActions, mapState } from 'pinia';
+import utilsCpf from '@/utils/cpf'
+import IconDelete from '@/components/icons/Delete.vue';
 
 export default defineComponent({
   name: 'PageIndex',
+  components: {
+    IconDelete
+  },
   async setup() {
     useHead({ title: 'Users' })
     const userStore = useUserStore()
@@ -38,7 +66,9 @@ export default defineComponent({
   },
   data() {
     return {
-      inputSearch: ''
+      inputSearch: '',
+      forDeleteId: '', 
+      showModal: false
     }
   },
   computed: {
@@ -50,17 +80,28 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapActions(useUserStore, ['deleteRegister']),
     getInputSearchValue(value: string) {
       this.inputSearch = value
     },
     goTo(route: string) {
       this.$nuxt.$router.push(route)
     },
-    handleDelete(id: string) {
-      console.log(id)
+    handleConfirmationModalDelete(id: string) {
+      this.forDeleteId = id
+      this.showModal = true
+    },
+    async handleDeleteUser () {
+      await this.deleteRegister(this.forDeleteId)
+      this.showModal = false
+      this.forDeleteId = ''
+      this.inputSearch = ''
     },
     handleToDetails(id: string) {
       this.$router.push(`/user/${id}`)
+    },
+    handleMaskCpf(cpf: string): string {
+      return utilsCpf.mask(cpf)
     }
   }
 })
@@ -101,6 +142,22 @@ export default defineComponent({
       grid-template-columns: repeat(5, 1fr);
     }
   }
+}
 
+.text {
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    justify-content: center;
+  }
 }
 </style>
