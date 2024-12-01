@@ -1,11 +1,10 @@
 <template>
   <div class="card" @click.stop="$emit('main')">
     <div class="information">
-      <div class="primary">{{ primaryText }}</div>
-      <div class="secondary">{{ secondaryText }}</div>
+      <slot name="information"></slot>
     </div>
     <div v-if="hadAction" class="action" @click.stop="$emit('action')">
-      <slot></slot>
+      <slot name="action"></slot>
     </div>
   </div>
 </template>
@@ -55,22 +54,6 @@ export default defineComponent({
     cursor: pointer;
   }
 
-  .information {
-
-    .primary {
-      font-weight: 500;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 160px;
-    }
-
-    .secondary {
-      font-size: 12px;
-      font-weight: 300;
-    }
-  }
-
   .action {
     width: 40px;
     height: 40px;
@@ -80,7 +63,7 @@ export default defineComponent({
     border-radius: 100%;
 
     &:hover {
-      background-color: #d1cccc;
+      background-color: #ffffffa4;
       transition: background-color 250ms linear;
     }
   }
