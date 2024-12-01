@@ -145,6 +145,10 @@ table {
   padding: 16px;
 }
 
+.overflow-hidden {
+  overflow: hidden;
+}
+
 * {  
   box-sizing: border-box;
 }
