@@ -6,6 +6,8 @@ Site está com deploy em https://teck-solucoes-teste.onrender.com; Por ser trata
 
 Abaixo está o passa a passo padrão de apps utilizando Nuxt, não é necessário nenhum tipo de comando para rodar json-server, estou usando o próprio Server API que o Nuxt possui para persistência do CRUD.
 
+Versão do Node >= 20.13.1
+
 ## Setup
 ```bash
 # npm
